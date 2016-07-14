@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<constant name="struts.enable.DynamicMethodInvocation" value="true" />
+	<constant name="struts.custom.i18n.resources" value="message" />
+	<constant name="struts.i18n.encoding" value="UTF-8"></constant>
+	<!-- 上传过程中临时文件存放目录 -->
+	<constant name="struts.multipart.saveDir" value=""></constant>
+	<package name="default" namespace="/" extends="struts-default">
+		<default-action-ref name="error"></default-action-ref>
+		<action name="error">
+			<result>/error.jsp</result>
+		</action>
+		
+		<action name="*_*" method="{2}" class="com.whoami.action.{1}">
+			<result>/login.jsp</result>	
+			<result name="getAllContainer">/viewContainer.jsp</result>	
+			<result name="getContainerMeta">/containerMeta.jsp</result>
+			<result name="getObjMeta">/objMeta.jsp</result>
+			<result name="addSuccess">/addSuccess.jsp</result>
+			<result name="downSuccess">/downSuccess.jsp</result>
+			<result name="downFalse">/downFalse.jsp</result>
+			<result name="loginSuccess">/index.jsp</result>
+			<result name="loginFalse">/login.jsp</result>
+		</action>
+		<action name="upload" method="uploadFile" class="com.whoami.action.ObjectAction">
+             <result name="success">/uploadResult.jsp</result>
+             <result name="input">/index.jsp</result>
+             <!-- 定义文件上传拦截器 -->
+            <interceptor-ref name="fileUpload">
+                 <!-- 设置文件上传大小 -->
+                <param name="maximumSize">409600</param>
+                 <!-- 设置文件上传类型 
+                 <param name="allowedTypes">
+                     application/vnd.ms-powerpoint
+                 </param>
+                 -->
+             </interceptor-ref>
+             <!-- 自定义了拦截器后必手动定义默认的拦截器，否则默认的拦截器不会被执行 -->
+             <interceptor-ref name="defaultStack"></interceptor-ref>
+         </action>
+	</package>
+</struts>
